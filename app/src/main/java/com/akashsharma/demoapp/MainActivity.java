@@ -9,7 +9,36 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import java.util.HashMap;
+class database
+{
+    private static HashMap<String,String> userslist=new HashMap<String, String>();
+    public boolean search(String inp1,String inp2)
+    {
+        if(userslist.containsKey(inp1))
+        {
+            return userslist.get(inp1).equals(inp2);
+        }
+        else
+        {
+            return  false;
+        }
+    }
 
+    public void addnewdata(String inp1,String inp2)
+    {
+        userslist.put(inp1,inp2);
+    }
+
+    public boolean availability(String s)
+    {
+        return userslist.containsKey(s);
+    }
+    public void print()
+    {
+        System.out.println(userslist);
+    }
+
+}
 public class MainActivity extends AppCompatActivity {
     private TextView attemptsleft;
     private Button login;
@@ -17,7 +46,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText username;
     private EditText password;
     private int attemptscnt=5;
-    private HashMap<String,String> database=new HashMap<String, String>();
+    database d=new database();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,14 +60,15 @@ public class MainActivity extends AppCompatActivity {
         login= findViewById(R.id.loginbutton);
         register= findViewById(R.id.registerbutton);
         attemptsleft.setText(attemptsleft.getText().toString()+" "+Integer.toString(attemptscnt));
-        addnewdata("akash","1234");
+        d.addnewdata("akash","1234");
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(search(username.getText().toString(),password.getText().toString()))
+                if(d.search(username.getText().toString(),password.getText().toString()))
                 {
                     Intent homepage=new Intent(MainActivity.this,HomePageActivity.class);
+                    homepage.putExtra("name",username.getText().toString());
                     startActivity(homepage);
                 }
                 else
@@ -66,11 +98,13 @@ public class MainActivity extends AppCompatActivity {
 
         if(getIntent().getStringExtra("name") != null)
         {
-            if(!database.containsKey(getIntent().getStringExtra("name")))
+            if(!d.availability(getIntent().getStringExtra("name")))
             {
-                addnewdata(getIntent().getStringExtra("name"),getIntent().getStringExtra("pass"));
-                System.out.println(database);
+                d.addnewdata(getIntent().getStringExtra("name"),getIntent().getStringExtra("pass"));
+//                System.out.println(d);
+                d.print();
             }
+
             else
             {
                 Intent registration = new Intent(MainActivity.this,RegisterPageActivity.class);
@@ -81,20 +115,5 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean search(String inp1,String inp2)
-    {
-        if(database.containsKey(inp1))
-        {
-            return database.get(inp1).equals(inp2);
-        }
-        else
-        {
-            return  false;
-        }
-    }
 
-    public void addnewdata(String inp1,String inp2)
-    {
-        database.put(inp1,inp2);
-    }
 }

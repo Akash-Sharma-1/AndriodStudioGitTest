@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RegisterPageActivity extends AppCompatActivity {
     private EditText reguser;
@@ -24,7 +25,8 @@ public class RegisterPageActivity extends AppCompatActivity {
         error = findViewById(R.id.Error);
         if(getIntent().getStringExtra("ERROR")!=null)
         {
-            error.setText(getIntent().getStringExtra("ERROR"));
+            Toast.makeText(RegisterPageActivity.this, getIntent().getStringExtra("ERROR"), Toast.LENGTH_LONG).show();
+//            error.setText();
         }
         save.setOnClickListener(new View.OnClickListener() {
             @Override
